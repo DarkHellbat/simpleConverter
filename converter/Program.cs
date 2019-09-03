@@ -37,7 +37,7 @@ namespace converter
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Filter = "mp3 files (*.mp3)|*.mp3|All files (*.*)|*.*";
             if (fileDialog.ShowDialog() == DialogResult.OK)
-                Regex format = new Regex("");
+                
             ConvertToMp3(fileDialog.FileName,fileDialog.FileName.Remove(fileDialog.FileName.Length-3)+"wav");
         }
 
