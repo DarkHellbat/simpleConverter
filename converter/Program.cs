@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using FormatLib;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,8 @@ namespace converter
         static IContainer ContainerBuild(Assembly assembly)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterAssemblyTypes(assembly)
-                .Where(x => !x.IsInterface)
+            builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(Format)))
+               // .Where(x => !x.IsInterface)
                 .AsSelf()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -37,10 +38,11 @@ namespace converter
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Filter = "mp3 files (*.mp3)|*.mp3|All files (*.*)|*.*";
             if (fileDialog.ShowDialog() == DialogResult.OK)
+                //Regex format = ;
                 
-            ConvertToMp3(fileDialog.FileName,fileDialog.FileName.Remove(fileDialog.FileName.Length-3)+"wav");
+                Read(fileDialog.FileName, fileDialog.FileName.Remove(fileDialog.FileName.Length - 3) + "wav");
+           // ConvertToMp3(fileDialog.FileName,fileDialog.FileName.Remove(fileDialog.FileName.Length-3)+"wav");
         }
-
         private static void ConvertToMp3(string startPath, string resultPath)
         {
             using (Mp3FileReader mp3 = new Mp3FileReader(startPath))
@@ -51,5 +53,19 @@ namespace converter
                 }
             }
         }
+        public static void Read(string startPath, string resultPath)
+        {
+            string choise = Console.ReadLine();
+            switch (choise)
+            {
+                case "1":
+
+                    break;
+                case "2":
+                    ConvertToMp3(startPath, resultPath);
+                    break;
+            }
+        }
+
     }
 }
