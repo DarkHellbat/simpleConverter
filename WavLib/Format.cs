@@ -1,5 +1,4 @@
 ﻿using CoreLib;
-using NAudio.Lame;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -8,20 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FormatLib
+namespace WavLib
 {
-    public class MP3Format : IFormat
+    public class WavFormat : IFormat
     {
-        public string Name => "MP3";
+        public string Name => "WAV";
 
         public IDecoder Decoder { get; }
 
         public IEncoder Encoder { get; }
 
-        public ISave Save { get; set; }
+        public ISave Save { get; set;}
         //ISave IFormat.Save { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public MP3Format(MP3Encoder encoder, MP3Decoder decoder, Mp3Save save)
+        public WavFormat(WavEncoder encoder, WavDecoder decoder, WavSave save)
         {
             Decoder = decoder;
             Encoder = encoder;
@@ -31,7 +30,7 @@ namespace FormatLib
 
 
 
-    public class MP3Decoder : IDecoder
+    public class WavDecoder : IDecoder
     {
         public WaveStream Decode(Stream input)
         {
@@ -42,24 +41,30 @@ namespace FormatLib
         }
     }
 
-    public class MP3Encoder : IEncoder
+    public class WavEncoder : IEncoder
     {
         public Stream Encode(WaveStream output)
         {
             var newStream = new MemoryStream();
-            using (LameMP3FileWriter mp3 = new LameMP3FileWriter(newStream, output.WaveFormat, 128))
+           // using (WaveFileWriter wav = new WaveFileWriter(output, WaveFormat))
             {
-                output.CopyTo(mp3);
-                return mp3;
+                output.CopyTo(newStream);
+                return newStream;
             }
         }
     }
 
-    public class Mp3Save : ISave
+    public class WavSave : ISave
     {
         public void Save(Stream input)
         {
-            Mp3Save mp3 = new Mp3Save();// input);
+            WaveFileWriter writer = new WaveFileWriter(input, new WaveFormat(44100, 2));
+            byte[] buffer = new byte[1024];
+            //int read;
+            //while ((read = reader.Read(buffer, 0, buffer.Length)) > 0)
+            //{
+                writer.Write(buffer, 0, buffer.Length);
+            //}
         }
     }
 }

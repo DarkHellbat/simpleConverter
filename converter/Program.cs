@@ -1,8 +1,9 @@
 ﻿using Autofac;
-using FormatLib;
+using CoreLib;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,62 +15,55 @@ namespace converter
 {
     class Program
     {
+       // public static ICollection<Format> filters;
+
         static IContainer ContainerBuild(Assembly assembly)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(Format)))
-               // .Where(x => !x.IsInterface)
-                .AsSelf()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+            var path = AppDomain.CurrentDomain.BaseDirectory;
+            string[] files = Directory.GetFiles(path, "*Lib.dll");
 
-         //   builder.RegisterType<Mp3FileReader>().AsSelf().AsImplementedInterfaces();
+            foreach (var f in files)
+            {
+                RegisterAssembly(builder, Assembly.LoadFile(f));
+                        }
+
+            RegisterAssembly(builder, Assembly.GetCallingAssembly());
+            //   builder.RegisterType<Mp3FileReader>().AsSelf().AsImplementedInterfaces();
             return builder.Build();
         }
-       [STAThread] static void Main(string[] args)
+
+        private static void RegisterAssembly(ContainerBuilder builder, Assembly assembly)
         {
-            // using 
+            builder.RegisterAssemblyTypes(assembly)
+                                .AsSelf()
+                                .AsImplementedInterfaces()
+                                .SingleInstance();
+        }
+
+        [STAThread]
+        static void Main(string[] args)
+        {
             var container = ContainerBuild(Assembly.GetExecutingAssembly());
+            var formatSelector = container.Resolve<IFormatSelector>();
 
-           // var somevar = container.Resolve<IMp3FileReader>
-
+            var sourceFormat = formatSelector.GetFormat();
+            //foreach (var f in  sourceFormat.)
+                var targetFormat = formatSelector.GetFormat(sourceFormat);
+          
             Console.WriteLine("Select file path");
             Console.ReadKey();
+
             OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = "mp3 files (*.mp3)|*.mp3|All files (*.*)|*.*";
+            fileDialog.Filter = $"{sourceFormat.Name} files (*.{sourceFormat.Name})|*.{sourceFormat.Name}|All files (*.*)|*.*";
+
             if (fileDialog.ShowDialog() == DialogResult.OK)
-                //Regex format = ;
-                using (container)
-                {
-                    var write = container.Resolve<IAction>();
-                    write.Write();
-                }
-                    Read(fileDialog.FileName, fileDialog.FileName.Remove(fileDialog.FileName.Length - 3) + "wav");
-           // ConvertToMp3(fileDialog.FileName,fileDialog.FileName.Remove(fileDialog.FileName.Length-3)+"wav");
+                FileStream file = new FileStream(fileDialog.FileName, FileMode.Open);
+                Console.ReadKey();
+            //targetFormat;
+            //    //Regex format = ;
+            //    Read(fileDialog.FileName, fileDialog.FileName.Remove(fileDialog.FileName.Length - 3) + "wav");
+            // ConvertToMp3(fileDialog.FileName,fileDialog.FileName.Remove(fileDialog.FileName.Length-3)+"wav");
         }
-        private static void ConvertToMp3(string startPath, string resultPath)
-        {
-            using (Mp3FileReader mp3 = new Mp3FileReader(startPath))
-            {
-                using (WaveStream wav = WaveFormatConversionStream.CreatePcmStream(mp3))
-                {
-                    WaveFileWriter.CreateWaveFile(resultPath, wav);
-                }
-            }
-        }
-        public static void Read(string startPath, string resultPath)
-        {
-            string choise = Console.ReadLine();
-            switch (choise)
-            {
-                case "1":
-
-                    break;
-                case "2":
-                    ConvertToMp3(startPath, resultPath);
-                    break;
-            }
-        }
-
     }
 }
