@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreLib", "CoreLib\CoreLib.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WavLib", "WavLib\WavLib.csproj", "{98CEAF00-2133-4CD4-B9B1-61CA19BFDA59}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAudio", "NAudio-master\NAudio\NAudio.csproj", "{82B656ED-C195-41DF-99E7-4DB27014A029}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{98CEAF00-2133-4CD4-B9B1-61CA19BFDA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98CEAF00-2133-4CD4-B9B1-61CA19BFDA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98CEAF00-2133-4CD4-B9B1-61CA19BFDA59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82B656ED-C195-41DF-99E7-4DB27014A029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82B656ED-C195-41DF-99E7-4DB27014A029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82B656ED-C195-41DF-99E7-4DB27014A029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82B656ED-C195-41DF-99E7-4DB27014A029}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

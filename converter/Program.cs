@@ -53,12 +53,25 @@ namespace converter
           
             Console.WriteLine("Select file path");
             Console.ReadKey();
-
+            var extention = sourceFormat.Name.ToLower();
             OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = $"{sourceFormat.Name} files (*.{sourceFormat.Name})|*.{sourceFormat.Name}|All files (*.*)|*.*";
+            fileDialog.Filter = $"{extention} files (*.{extention})|*.{extention}|All files (*.*)|*.*";
 
             if (fileDialog.ShowDialog() == DialogResult.OK)
-                FileStream file = new FileStream(fileDialog.FileName, FileMode.Open);
+            {
+                Stream content = File.OpenRead(fileDialog.FileName);
+                WaveStream wave = sourceFormat.Decoder.Decode(content);
+
+                using (var output = File.Create(fileDialog.FileName.Replace(extention, targetFormat.Name.ToLower())))
+                {
+                    targetFormat.Encoder.Encode(wave, output);
+                }
+
+                Console.WriteLine("OK");
+                Console.ReadKey();
+            }
+            
+                //FileStream file = new FileStream(fileDialog.FileName, FileMode.Open);
                 Console.ReadKey();
             //targetFormat;
             //    //Regex format = ;

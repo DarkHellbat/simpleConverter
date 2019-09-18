@@ -17,14 +17,10 @@ namespace WavLib
 
         public IEncoder Encoder { get; }
 
-        public ISave Save { get; set;}
-        //ISave IFormat.Save { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public WavFormat(WavEncoder encoder, WavDecoder decoder, WavSave save)
+        public WavFormat(WavEncoder encoder, WavDecoder decoder)
         {
             Decoder = decoder;
             Encoder = encoder;
-            Save = save;
         }
     }
 
@@ -34,37 +30,21 @@ namespace WavLib
     {
         public WaveStream Decode(Stream input)
         {
-            using (Mp3FileReader mp3 = new Mp3FileReader(input))
+            var wav = new WaveFileReader(input);
             {
-                return WaveFormatConversionStream.CreatePcmStream(mp3);
+                return WaveFormatConversionStream.CreatePcmStream(wav);
             }
         }
     }
 
     public class WavEncoder : IEncoder
     {
-        public Stream Encode(WaveStream output)
+        public void Encode(WaveStream waveData, Stream output)
         {
-            var newStream = new MemoryStream();
-           // using (WaveFileWriter wav = new WaveFileWriter(output, WaveFormat))
+            var wav = new WaveFileWriter(output, waveData.WaveFormat);
             {
-                output.CopyTo(newStream);
-                return newStream;
+                waveData.CopyTo(wav);
             }
-        }
-    }
-
-    public class WavSave : ISave
-    {
-        public void Save(Stream input)
-        {
-            WaveFileWriter writer = new WaveFileWriter(input, new WaveFormat(44100, 2));
-            byte[] buffer = new byte[1024];
-            //int read;
-            //while ((read = reader.Read(buffer, 0, buffer.Length)) > 0)
-            //{
-                writer.Write(buffer, 0, buffer.Length);
-            //}
         }
     }
 }

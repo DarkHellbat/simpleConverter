@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace CoreLib
 {
-    public interface ISave
+    public interface ISaver
     {
-        void Save(Stream input);
+        void Save(Stream input, string path);
     }
 }

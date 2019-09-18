@@ -35,9 +35,6 @@
     <Reference Include="Autofac, Version=4.9.4.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.9.4\lib\net45\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.1.9.0\lib\net35\NAudio.dll</HintPath>
-    </Reference>
     <Reference Include="NAudio.Flac, Version=1.0.5702.29018, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.Flac.1.0.5702.29018\lib\net45\NAudio.Flac.dll</HintPath>
     </Reference>
@@ -71,6 +68,10 @@
     <ProjectReference Include="..\FormatLib\Mp3Lib.csproj">
       <Project>{259d9436-6e46-4f5b-9111-93631d57fa61}</Project>
       <Name>Mp3Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NAudio-master\NAudio\NAudio.csproj">
+      <Project>{82b656ed-c195-41df-99e7-4db27014a029}</Project>
+      <Name>NAudio</Name>
     </ProjectReference>
     <ProjectReference Include="..\WavLib\WavLib.csproj">
       <Project>{98ceaf00-2133-4cd4-b9b1-61ca19bfda59}</Project>

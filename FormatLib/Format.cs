@@ -18,14 +18,13 @@ namespace FormatLib
 
         public IEncoder Encoder { get; }
 
-        public ISave Save { get; set; }
+        //public ISave Save { get; set; }
         //ISave IFormat.Save { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public MP3Format(MP3Encoder encoder, MP3Decoder decoder, Mp3Save save)
+        public MP3Format(MP3Encoder encoder, MP3Decoder decoder)
         {
             Decoder = decoder;
             Encoder = encoder;
-            Save = save;
         }
     }
 
@@ -35,31 +34,19 @@ namespace FormatLib
     {
         public WaveStream Decode(Stream input)
         {
-            using (Mp3FileReader mp3 = new Mp3FileReader(input))
-            {
-                return WaveFormatConversionStream.CreatePcmStream(mp3);
-            }
+            var mp3 = new Mp3FileReader(input);
+            return WaveFormatConversionStream.CreatePcmStream(mp3);
         }
     }
 
     public class MP3Encoder : IEncoder
     {
-        public Stream Encode(WaveStream output)
+        public void Encode(WaveStream waveData, Stream outputStream)
         {
-            var newStream = new MemoryStream();
-            using (LameMP3FileWriter mp3 = new LameMP3FileWriter(newStream, output.WaveFormat, 128))
-            {
-                output.CopyTo(mp3);
-                return mp3;
+            using (LameMP3FileWriter mp3 = new LameMP3FileWriter(outputStream, waveData.WaveFormat, 128))
+            { 
+                waveData.CopyTo(mp3);
             }
-        }
-    }
-
-    public class Mp3Save : ISave
-    {
-        public void Save(Stream input)
-        {
-            Mp3Save mp3 = new Mp3Save();// input);
         }
     }
 }

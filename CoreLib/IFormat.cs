@@ -11,6 +11,6 @@ namespace CoreLib
         string Name { get; }
         IDecoder Decoder { get; }
         IEncoder Encoder { get; }
-        ISave Save { get; set; }
+        //ISave Save { get; set; }
     }
 }
